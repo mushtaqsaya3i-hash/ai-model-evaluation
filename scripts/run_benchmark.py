@@ -26,14 +26,42 @@ def format_markdown_table(rows):
     return "\n".join(lines)
 
 
+
 def run_all(runner=run_in_sandbox, db_path=DB_FILE, runs=5, timeout=90, names=None,
             runner_label="docker"):
     rows = []
-    for name in (names or CANDIDATES):
-        report = evaluate_in_sandbox(CANDIDATES[name], runs=runs, timeout=timeout, runner=runner)
-        save_benchmark_run(db_path, name, report, runner=runner_label)
-        rows.append((name, report))
+    selected = list(names) if names else list(CANDIDATES)
+
+    for index, name in enumerate(selected, start=1):
+        print(
+            f"[{index}/{len(selected)}] Running candidate: {name}",
+            flush=True,
+        )
+
+        try:
+            report = evaluate_in_sandbox(
+                CANDIDATES[name],
+                runs=runs,
+                timeout=timeout,
+                runner=runner,
+            )
+            save_benchmark_run(db_path, name, report, runner=runner_label)
+            rows.append((name, report))
+
+            print(
+                f"    Finished: score={report['score']:.2f}%, "
+                f"error={report['error_type']}",
+                flush=True,
+            )
+        except Exception as exc:
+            print(
+                f"    ERROR: {type(exc).__name__}: {exc}",
+                flush=True,
+            )
+            raise
+
     return rows
+
 
 
 def main():
