@@ -1,0 +1,18 @@
+﻿id,timestamp_utc,candidate,status,passed,execution_seconds,stdout,stderr
+1,2026-10-10T13:44:38.948370+00:00,average_candidate_v1,pass,1,0.41,,
+2,2026-10-10T13:46:56.822938+00:00,candidate_correct,pass,1,0.54,,
+3,2026-10-10T13:46:57.205313+00:00,candidate_wrong,wrong_output,0,0.38,,"Traceback (most recent call last):
+  File ""/sandbox/main.py"", line 7, in <module>
+    assert calculate_average([2, 4, 6]) == 4
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+"
+4,2026-10-10T13:46:57.599520+00:00,candidate_runtime_error,runtime_error,0,0.39,,"Traceback (most recent call last):
+  File ""/sandbox/main.py"", line 7, in <module>
+    assert calculate_average([2, 4, 6]) == 4
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""/sandbox/main.py"", line 3, in calculate_average
+    return unknown_function(numbers)
+           ^^^^^^^^^^^^^^^^
+NameError: name 'unknown_function' is not defined
+"
