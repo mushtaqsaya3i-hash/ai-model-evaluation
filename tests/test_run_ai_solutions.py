@@ -61,7 +61,7 @@ def test_run_solutions_scores_and_stores_with_ai_prefix():
                              runner_label="local", progress=messages.append)
         by_label = dict(rows)
         assert by_label["good_model"]["score"] == 100.0
-        assert by_label["weak_model"]["score"] == 88.68
+        assert by_label["weak_model"]["score"] == 89.29
         assert by_label["weak_model"]["error_type"] == "wrong_output"
         with closing(sqlite3.connect(db)) as conn:
             names = {r[0] for r in conn.execute("SELECT candidate FROM benchmark_runs")}

@@ -44,25 +44,25 @@ def run_local(name, runs=2, timeout=60):
 def test_reference_scores_100_percent():
     r = run_local("reference")
     assert r["score"] == 100.0
-    assert r["passed"] == r["total"] == 25
-    assert r["weighted_total"] == 53
+    assert r["passed"] == r["total"] == 27
+    assert r["weighted_total"] == 56
     assert r["correctness"] == 1.0
     assert r["error_type"] == "none"
     assert r["performance_ok"] is True
     assert len(r["performance_runs"]) == 2
 
 
-def test_no_trim_scores_47_of_53():
+def test_no_trim_scores_50_of_56():
     r = run_local("no_trim", runs=1)
-    assert r["score"] == 88.68
+    assert r["score"] == 89.29
     assert r["error_type"] == "wrong_output"
     assert r["case_results"]["outlier_dropped"] == "wrong_output"
     assert r["case_results"]["no_redup_after_trim"] == "wrong_output"
 
 
-def test_redup_after_trim_scores_50_of_53():
+def test_redup_after_trim_scores_53_of_56():
     r = run_local("redup_after_trim", runs=1)
-    assert r["score"] == 94.34
+    assert r["score"] == 94.64
     failed = [k for k, v in r["case_results"].items() if v != "pass"]
     assert failed == ["no_redup_after_trim"]
 
@@ -180,8 +180,8 @@ def test_run_all_and_markdown_table():
         rows = run_all(runner=local_runner, db_path=Path(d) / "r.db", runs=1, timeout=60,
                        names=["reference", "no_trim"], runner_label="local")
     table = format_markdown_table(rows)
-    assert "| reference | 100.00% | 25/25 | 100.00% |" in table
-    assert "| no_trim | 88.68% |" in table
+    assert "| reference | 100.00% | 27/27 | 100.00% |" in table
+    assert "| no_trim | 89.29% |" in table
 
 
 # ------------------------- real Docker (skipped if absent) -------------------
@@ -208,7 +208,7 @@ def test_docker_reference_passes_within_limit():
 @docker
 def test_docker_no_trim_matches_expected_score():
     r = evaluate_in_sandbox(CANDIDATES["no_trim"], runs=1, timeout=90)
-    assert r["score"] == 88.68
+    assert r["score"] == 89.29
 
 
 @docker

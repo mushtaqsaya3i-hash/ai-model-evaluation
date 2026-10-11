@@ -19,8 +19,8 @@ def _dedup(seq):
 def test_reference_scores_100_percent():
     r = evaluate_second_challenge_candidate(reference)
     assert r["score"] == 100.0
-    assert r["passed"] == r["total"] == 25
-    assert r["weighted_total"] == 53
+    assert r["passed"] == r["total"] == 27
+    assert r["weighted_total"] == 56
     assert r["error_type"] == "none"
     assert r["performance_ok"] is True
 

@@ -3,8 +3,11 @@
 import random
 
 CASES = [
-    ("basic", [1, 2, 3], 0, 10, 2.0, 1),
-    ("filter_then_dedup", [5, 100, 5, 7], 0, 50, 6.0, 3),
+
+     ("basic", [1, 2, 3], 0, 10, 2.0, 1),
+     ("infinite_bound", [1, 2, 3], 0, float("inf"), 2.0, 2),
+     ("empty_generator", [], 0, 10, None, 1),
+     ("filter_then_dedup", [5, 100, 5, 7], 0, 50, 6.0, 3),
     ("nonconsecutive_dups_kept", [1, 2, 1], 0, 10, 4 / 3, 2),
     ("inclusive_bounds", [0, 10], 0, 10, 5.0, 2),
     ("single_value_range", [3, 3, 3], 3, 3, 3.0, 2),
@@ -32,8 +35,7 @@ ERROR_CASES = [
     ("bool_element", [True, 2], 0, 10, TypeError),
     ("none_element", [None], 0, 10, TypeError),
 ]
-
-GENERATOR_CASES = {"generator_input"}
+GENERATOR_CASES = {"generator_input", "empty_generator"}
 PERF_LIMIT_SECONDS = 3.0
 PERF_WEIGHT = 3
 ERROR_CASE_WEIGHT = 2

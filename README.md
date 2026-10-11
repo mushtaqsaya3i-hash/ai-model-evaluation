@@ -194,7 +194,7 @@ This challenge evaluates independently generated Python solutions for
 ### Evaluation methodology
 
 - **Models evaluated:** Claude, Gemini, and GPT.
-- **Test suite:** 25 test cases per evaluation.
+- **Test suite:** 27 test cases per evaluation.
 - **Execution environment:** Docker sandbox.
 - **Scoring:** Correctness score, passed test cases, execution time, and error classification.
 - **Data storage:** SQLite (`evaluation_results.db`).
@@ -205,13 +205,13 @@ Each model received the same prompt. Its original response was saved in
 
 ### Results
 
-| Model | Recorded Runs | Latest Score | Latest Tests Passed | Average Execution Time |
-|---|---:|---:|---:|---:|
-| Claude | 3 | 100% | 25/25 | 0.5173 s |
-| Gemini | 2 | 100% | 25/25 | 0.6885 s |
-| GPT | 5 | 100% | 25/25 | 0.6196 s |
+| Model | Latest Score | Tests Passed | Median Execution Time |
+|---|---:|---:|---:|
+| Claude | 100.00% | 27/27 | 0.48 s |
+| Gemini | 100.00% | 27/27 | 0.56 s |
+| GPT | 100.00% | 27/27 | 0.52 s |
 
-All three solutions passed the 25-case test suite in their latest recorded
+All three solutions passed the 27-case test suite in their latest recorded
 evaluations. These are preliminary results for one programming challenge;
 they do not establish general model superiority.
 
