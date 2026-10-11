@@ -1,0 +1,4 @@
+﻿model,recorded_runs,latest_score_percent,latest_passed,latest_total,latest_correctness_percent,latest_execution_seconds,average_execution_seconds,latest_error_type,latest_timestamp_utc
+claude,3,100.0,25,25,100.0,0.503,0.5173,none,2026-10-11T09:32:42.099741+00:00
+gemini,2,100.0,25,25,100.0,0.681,0.6885,none,2026-10-11T09:32:47.517985+00:00
+gpt,5,100.0,25,25,100.0,0.632,0.6196,none,2026-10-11T09:32:52.853029+00:00

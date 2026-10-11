@@ -183,3 +183,46 @@ Do not assume that the sandbox provides complete isolation. Further security tes
 **GitHub repository:** [mushtaqsaya3i-hash/ai-model-evaluation](https://github.com/mushtaqsaya3i-hash/ai-model-evaluation)
 
 This project is an ongoing exploration of automated coding evaluation, Python testing, sandbox execution, and data-driven reporting.
+
+
+
+## Challenge 2: AI-Generated Solution Benchmark
+
+This challenge evaluates independently generated Python solutions for
+`calculate_constrained_average_v2(numbers, minimum, maximum)`.
+
+### Evaluation methodology
+
+- **Models evaluated:** Claude, Gemini, and GPT.
+- **Test suite:** 25 test cases per evaluation.
+- **Execution environment:** Docker sandbox.
+- **Scoring:** Correctness score, passed test cases, execution time, and error classification.
+- **Data storage:** SQLite (`evaluation_results.db`).
+- **Report export:** `ai_model_comparison.csv`.
+
+Each model received the same prompt. Its original response was saved in
+`benchmarks/ai_solutions/` and evaluated without manually correcting the code.
+
+### Results
+
+| Model | Recorded Runs | Latest Score | Latest Tests Passed | Average Execution Time |
+|---|---:|---:|---:|---:|
+| Claude | 3 | 100% | 25/25 | 0.5173 s |
+| Gemini | 2 | 100% | 25/25 | 0.6885 s |
+| GPT | 5 | 100% | 25/25 | 0.6196 s |
+
+All three solutions passed the 25-case test suite in their latest recorded
+evaluations. These are preliminary results for one programming challenge;
+they do not establish general model superiority.
+
+### Run the evaluation
+
+```powershell
+python -m scripts.run_ai_solutions --runs 5 --timeout 90
+```
+
+### Export the comparison report
+
+```powershell
+python .\scripts\export_ai_comparison.py
+```

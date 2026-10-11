@@ -1,0 +1,33 @@
+Write a Python function:
+
+    calculate_constrained_average_v2(numbers, minimum, maximum)
+
+Rules, applied in exactly this order:
+
+0. Validation
+   a. minimum and maximum must be real numbers (int or float, but NOT bool);
+      otherwise raise TypeError.
+   b. If either bound is NaN, or minimum > maximum, raise ValueError.
+   c. numbers is any iterable. Every element must be a real number (int or
+      float, NOT bool), otherwise raise TypeError. This applies to all
+      elements, including ones that would later be filtered out. NaN elements
+      are valid numbers.
+1. Filter: keep values with minimum <= value <= maximum (inclusive). NaN fails
+   every comparison, so it is dropped here.
+2. Consecutive dedup: on the FILTERED sequence, drop a value if it equals the
+   previous kept value (1 == 1.0). Non-consecutive repeats stay. Order is
+   preserved.
+3. Outlier trim (single pass): let m be the mean and s the POPULATION standard
+   deviation of the deduplicated values. Drop every value whose distance from
+   m is strictly greater than 2 * s. Do NOT deduplicate again after trimming
+   (values that become adjacent stay as they are).
+4. Return the arithmetic mean of the remaining values as a float. Return None
+   if nothing remained after step 1 (step 3 never empties a non-empty list).
+
+Requirements:
+- Python 3 standard library only.
+- Must handle an input of 1,000,000 numbers in about 3 seconds or less.
+- Results are compared with an absolute tolerance of 1e-9.
+- Do not modify the input.
+- Reply with exactly one Python code block containing the complete function
+  and its imports, and nothing else.
