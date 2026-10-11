@@ -1,70 +1,57 @@
 
-"""Evaluate Challenge 3 candidates, including input-mutation checks."""
+"""Evaluate trusted Challenge 3 reference and mutant candidates."""
 
-from copy import deepcopy
-
-from benchmarks.third_challenge_cases import ALL_THIRD_CHALLENGE_CASES
+from benchmarks.third_challenge_cases import (
+    ALL_THIRD_CHALLENGE_CASES,
+    run_case,
+)
 from benchmarks.third_challenge_candidates import CANDIDATES
 
 
 def evaluate_candidate(func, cases):
     passed = 0
+    passed_weight = 0
     failures = []
+    total_weight = sum(case.weight for case in cases)
 
     for case in cases:
-        if case.name == "one_shot_generator":
-            args = ((item[:] for item in [[1, 2], [3, 4]]),)
-        else:
-            args = deepcopy(case.args)
+        outcome = run_case(func, case)
 
-        kwargs = deepcopy(case.kwargs)
-
-        before = (
-            deepcopy(args[0])
-            if args and isinstance(args[0], list)
-            else None
-        )
-
-        try:
-            result = func(*args, **kwargs)
-
-            if case.expected_exception is not None:
-                failures.append(
-                    (case.name, "expected exception was not raised")
-                )
-                continue
-
-            if result != case.expected:
-                failures.append((case.name, "wrong result"))
-                continue
-
-            if before is not None and args[0] != before:
-                failures.append((case.name, "input mutated"))
-                continue
-
+        if outcome.passed:
             passed += 1
+            passed_weight += case.weight
+        else:
+            failures.append((case.name, outcome.reason))
 
-        except Exception as exc:
-            if case.expected_exception is not None and isinstance(
-                exc, case.expected_exception
-            ):
-                passed += 1
-            else:
-                failures.append(
-                    (case.name, f"unexpected {type(exc).__name__}")
-                )
-
-    return passed, failures
+    return {
+        "passed": passed,
+        "total": len(cases),
+        "weighted_passed": passed_weight,
+        "weighted_total": total_weight,
+        "raw_score": round(100 * passed / len(cases), 2) if cases else 0,
+        "weighted_score": (
+            round(100 * passed_weight / total_weight, 2)
+            if total_weight else 0
+        ),
+        "failures": failures,
+    }
 
 
 def main():
     cases = ALL_THIRD_CHALLENGE_CASES
 
     for name, func in CANDIDATES.items():
-        passed, failures = evaluate_candidate(func, cases)
-        print(f"\n{name}: {passed}/{len(cases)} passed")
+        report = evaluate_candidate(func, cases)
 
-        for case_name, reason in failures:
+        print(
+            f"\n{name}: "
+            f"{report['passed']}/{report['total']} passed | "
+            f"raw={report['raw_score']:.2f}% | "
+            f"weighted={report['weighted_score']:.2f}% "
+            f"({report['weighted_passed']}/{report['weighted_total']} points)"
+        )
+
+        for case_name, reason in report["failures"]:
             print(f"  - {case_name}: {reason}")
 
 

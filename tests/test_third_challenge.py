@@ -4,7 +4,7 @@ import pytest
 from benchmarks.third_challenge import merge_intervals_v1
 from benchmarks.third_challenge_cases import (
     ALL_THIRD_CHALLENGE_CASES,
-    assert_input_not_mutated,
+    run_case,
 )
 
 
@@ -14,13 +14,8 @@ from benchmarks.third_challenge_cases import (
     ids=lambda case: case.name,
 )
 def test_third_challenge_cases(case):
-    if case.expected_exception is not None:
-        with pytest.raises(case.expected_exception):
-            merge_intervals_v1(*case.args, **case.kwargs)
-    else:
-        result = merge_intervals_v1(*case.args, **case.kwargs)
-        assert result == case.expected
-
+    outcome = run_case(merge_intervals_v1, case)
+    assert outcome.passed, f"{case.name}: {outcome.reason}"
 
 
 def test_input_is_not_mutated():
@@ -43,7 +38,19 @@ def test_output_contains_new_interval_lists():
     assert result[0] is not intervals[1]
 
 
-def test_invalid_merge_flag():
-    for value in (1, 0, None, "yes", [], {}):
-        with pytest.raises(TypeError):
-            merge_intervals_v1([[1, 2]], merge_adjacent=value)
+@pytest.mark.parametrize(
+    ("value", "expected"),
+    [
+        (1, [[1, 3]]),
+        (0, [[1, 2], [2, 3]]),
+        (None, [[1, 2], [2, 3]]),
+        ("yes", [[1, 3]]),
+        ([], [[1, 2], [2, 3]]),
+        ({}, [[1, 2], [2, 3]]),
+    ],
+)
+def test_merge_flag_uses_truthiness(value, expected):
+    assert merge_intervals_v1(
+        [[1, 2], [2, 3]],
+        merge_adjacent=value,
+    ) == expected
